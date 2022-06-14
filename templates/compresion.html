@@ -32,16 +32,16 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-        <a class="navbar-brand" href="index.html"><span>Proyecto TCyS</span></a>
+        <a class="navbar-brand" href="{{ url_for('home') }}"><span>Proyecto TCyS</span></a>
       </div>
       <div class="navbar-collapse collapse">
         <div class="menu">
           <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="index.html">El comienzo...</a></li>
-            <li role="presentation"><a href="JF.html">Joseph Fourier</a></li>
-            <li role="presentation"><a href="SF.html">Serie de Fourier</a></li>
-            <li role="presentation"><a href="compresion.html">Compresión</a></li>
-            <li role="presentation"><a href="fft.html">FFT</a></li>
+            <li role="presentation" class="active"><a href="{{ url_for('home') }}">El comienzo...</a></li>
+            <li role="presentation"><a href="{{ url_for('joseph_fourier') }}">Joseph Fourier</a></li>
+            <li role="presentation"><a href="{{ url_for('serie_fourier') }}">Serie de Fourier</a></li>
+            <li role="presentation"><a href="{{ url_for('compresion') }}">Compresión</a></li>
+            <li role="presentation"><a href="{{ url_for('fft') }}">FFT</a></li>
           </ul>
         </div>
       </div>
@@ -107,16 +107,16 @@
   </footer>
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="js/jquery-2.1.1.min.js"></script>
+  <script src="/static/js/jquery-2.1.1.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/wow.min.js"></script>
-  <script src="js/jquery.easing.1.3.js"></script>
-  <script src="js/jquery.isotope.min.js"></script>
-  <script src="js/jquery.bxslider.min.js"></script>
-  <script type="text/javascript" src="js/fliplightbox.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/wow.min.js"></script>
+  <script src="/static/js/jquery.easing.1.3.js"></script>
+  <script src="/static/js/jquery.isotope.min.js"></script>
+  <script src="/static/js/jquery.bxslider.min.js"></script>
+  <script type="text/javascript" src="/static/js/fliplightbox.min.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8HeI8o-c1NppZA-92oYlXakhDPYR7XMY"></script>
-  <script src="js/functions.js"></script>
+  <script src="/static/js/functions.js"></script>
   <script type="text/javascript">
     $('.portfolio').flipLightBox()
   </script>

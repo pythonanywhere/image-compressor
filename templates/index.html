@@ -31,16 +31,16 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-        <a class="navbar-brand" href="index.html"><span>Proyecto TCyS</span></a>
+        <a class="navbar-brand" href="{{ url_for('home') }}"><span>Proyecto TCyS</span></a>
       </div>
       <div class="navbar-collapse collapse">
         <div class="menu">
           <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="index.html">El comienzo...</a></li>
-            <li role="presentation"><a href="JF.html">Joseph Fourier</a></li>
-            <li role="presentation"><a href="SF.html">Serie de Fourier</a></li>
-            <li role="presentation"><a href="compresion.html">Compresión</a></li>
-            <li role="presentation"><a href="fft.html">FFT</a></li>
+            <li role="presentation" class="active"><a href="{{ url_for('home') }}">El comienzo...</a></li>
+            <li role="presentation"><a href="{{ url_for('joseph_fourier') }}">Joseph Fourier</a></li>
+            <li role="presentation"><a href="{{ url_for('serie_fourier') }}">Serie de Fourier</a></li>
+            <li role="presentation"><a href="{{ url_for('compresion') }}">Compresión</a></li>
+            <li role="presentation"><a href="{{ url_for('fft') }}">FFT</a></li>
           </ul>
         </div>
       </div>

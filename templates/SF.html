@@ -5,20 +5,19 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Serie de Fourier</title>
+  <title>Proyecto</title>
 
   <!-- Bootstrap -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/animate.css">
-  <link rel="stylesheet" href="css/font-awesome.min.css">
-  <link rel="stylesheet" href="css/font-awesome.css">
-  <link rel="stylesheet" href="css/jquery.bxslider.css">
-  <link href="css/overwrite.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="css/normalize.css" />
-  <link rel="stylesheet" type="text/css" href="css/demo.css" />
-  <link rel="stylesheet" type="text/css" href="css/set1.css" />
-  <link href="css/style.css" rel="stylesheet">
-
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/animate.css">
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/static/css/jquery.bxslider.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/normalize.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/demo.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/set1.css" />
+  <link href="/static/css/overwrite.css" rel="stylesheet">
+  <link href="/static/css/style.css" rel="stylesheet">
+  
 </head>
 
 <body>
@@ -32,16 +31,16 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-        <a class="navbar-brand" href="index.html"><span>Proyecto TCyS</span></a>
+        <a class="navbar-brand" href="{{ url_for('home') }}"><span>Proyecto TCyS</span></a>
       </div>
       <div class="navbar-collapse collapse">
         <div class="menu">
           <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="index.html">El comienzo...</a></li>
-            <li role="presentation"><a href="JF.html">Joseph Fourier</a></li>
-            <li role="presentation"><a href="SF.html">Serie de Fourier</a></li>
-            <li role="presentation"><a href="compresion.html">Compresión</a></li>
-            <li role="presentation"><a href="fft.html">FFT</a></li>
+            <li role="presentation" class="active"><a href="{{ url_for('home') }}">El comienzo...</a></li>
+            <li role="presentation"><a href="{{ url_for('joseph_fourier') }}">Joseph Fourier</a></li>
+            <li role="presentation"><a href="{{ url_for('serie_fourier') }}">Serie de Fourier</a></li>
+            <li role="presentation"><a href="{{ url_for('compresion') }}">Compresión</a></li>
+            <li role="presentation"><a href="{{ url_for('fft') }}">FFT</a></li>
           </ul>
         </div>
       </div>
@@ -70,7 +69,7 @@
         <div class="page-header">
           <div class="blog">
             <h5>Junio,08 2022</h5>
-            <img src="img/i5.jpg" class="img-responsive" alt="" />
+            <img src="/static/img/i5.jpg" class="img-responsive" alt="" />
 
             <h3>¿Para qué se usan las Series de Fourier?</h3>
 
@@ -128,16 +127,16 @@ La solución de este problema es la superposición de dos ondas viajando en dire
     </div>
   </footer>
 
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="js/jquery-2.1.1.min.js"></script>
+   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="/static/js/jquery-2.1.1.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/wow.min.js"></script>
-  <script src="js/jquery.easing.1.3.js"></script>
-  <script src="js/jquery.isotope.min.js"></script>
-  <script src="js/jquery.bxslider.min.js"></script>
-  <script type="text/javascript" src="js/fliplightbox.min.js"></script>
-  <script src="js/functions.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/wow.min.js"></script>
+  <script src="/static/js/jquery.easing.1.3.js"></script>
+  <script src="/static/js/jquery.isotope.min.js"></script>
+  <script src="/static/js/jquery.bxslider.min.js"></script>
+  <script type="text/javascript" src="/static/js/fliplightbox.min.js"></script>
+  <script src="/static/js/functions.js"></script>
   <script type="text/javascript">
     $('.portfolio').flipLightBox()
   </script>

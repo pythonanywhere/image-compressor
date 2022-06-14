@@ -45,10 +45,21 @@ def login_required(test):
 def home():
     return render_template('index.html')
 
-
 @app.route('/joseph_fourier')
 def joseph_fourier():
     return render_template('JF.html')
+
+@app.route('/serie_fourier')
+def serie_fourier():
+    return render_template('SF.html')
+
+@app.route('/compresion')
+def compresion():
+    return render_template('compresion.html')
+
+@app.route('/fft')
+def fft():
+    return render_template('fft.html')
 
 
 # @app.route('/login')
