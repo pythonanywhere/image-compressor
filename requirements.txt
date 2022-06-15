@@ -3,6 +3,8 @@ Flask-SQLAlchemy
 Flask-WTF
 WTForms
 coverage
+numpy
+matplotlib
 # ecdsa
 # paramiko
 # pycrypto
