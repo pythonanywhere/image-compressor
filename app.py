@@ -22,7 +22,8 @@ from PIL import Image
 app = Flask(__name__)
 app.config.from_object("config")
 current_wd = os.getcwd()
-image_directory = os.path.join(current_wd, "images")
+static_directory = os.path.join(current_wd, "static")
+image_directory = os.path.join(static_directory, "images")
 uncompressed_directory = os.path.join(image_directory, "uncompressed")
 compressed_directory = os.path.join(image_directory, "compressed")
 # db = SQLAlchemy(app)
@@ -97,9 +98,9 @@ def fft2():
     # El resultado de esto es una imágen en escala de grises pero ahora sólo con 2 dimensiones (altura y ancho)
     B = np.mean(A, -1)
 
-    # Procedemos a realizar la FFT2 (en este caso necesitamos la versión bidimensional porque es una señal bidimensional). 
+    # Procedemos a realizar la FFT2 (en este caso necesitamos la versión bidimensional porque es una señal bidimensional).
     # Esto es el equivalente de hacer FFT por todas las columns y luego todos los renglones o viceversa.
-    Bt = np.fft.fft2(B) # Bt al ser la transformada es una matriz de números complejos
+    Bt = np.fft.fft2(B)  # Bt al ser la transformada es una matriz de números complejos
 
     # Convertimos nuestra matriz a un arreglo unidimensional y calculamos las magnitudes de nuestros números complejos
     magnitudes = np.abs(Bt.reshape(-1))
@@ -113,9 +114,9 @@ def fft2():
 
     # El número anterior lo usaremos como índice y así obtener el coeficiente que representa el límite inferior de los coeficientes que mantendremos
     limite = Btsort[cantidad_a_eliminar]
-    
+
     # A partir de este límite crearemos una máscara determinando aquellos coeficiente que no son despreciables.
-    # ind es una matriz del mismo tamaño que Bt (transformada de B) 
+    # ind es una matriz del mismo tamaño que Bt (transformada de B)
     # pero con valores booleanos (que pueden ser interpretados como respondiendo la pregunta '¿este coeficiente es suficientemente grande/relevante para mantener en la memoria?')
     ind = np.abs(Bt) > limite
 
@@ -132,10 +133,20 @@ def fft2():
     img = img.convert("L")
 
     # Guardamos la imagen en el directorio de imagenes comprimidas
-    file_name = os.path.join(compressed_directory, file.filename)
-    img.save(file_name)
-    return send_file(file_name, mimetype=file.content_type)
+    compressed_file_name = os.path.join(compressed_directory, file.filename)
+    img.save(compressed_file_name)
 
+    # Aquí calculamos el tamaño en Bytes de ambos para razones demostrativas
+    original_file_size = os.stat(file_name).st_size  # en Bytes
+    result_file_size = os.stat(compressed_file_name).st_size  # en Bytes
+
+    return render_template(
+        "comparacion.html",
+        file=f"/static/images/uncompressed/{file.filename}",
+        compressed_file=f"/static/images/compressed/{file.filename}",
+        original_file_size=f"{original_file_size:,}",
+        result_file_size=f"{result_file_size:,}",
+    )
 
 # @app.route('/login')
 # def login():
