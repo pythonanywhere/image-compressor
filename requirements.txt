@@ -5,6 +5,7 @@ WTForms
 coverage
 numpy
 matplotlib
+Pillow
 # ecdsa
 # paramiko
 # pycrypto
