@@ -2,7 +2,7 @@
 # Imports
 # ----------------------------------------------------------------------------#
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 
 import logging
 from logging import Formatter, FileHandler
@@ -19,7 +19,9 @@ from PIL import Image
 app = Flask(__name__)
 app.config.from_object("config")
 current_wd = os.getcwd()
-static_directory = os.path.join(current_wd, "static")
+project_dir = os.path.join(current_wd, "image-compressor")
+static_directory = os.path.join(project_dir, "static")
+# static_directory = os.path.join(current_wd, "static")
 image_directory = os.path.join(static_directory, "images")
 uncompressed_directory = os.path.join(image_directory, "uncompressed")
 compressed_directory = os.path.join(image_directory, "compressed")
@@ -56,8 +58,12 @@ def fft():
 
 @app.route("/fft2", methods=["POST"])
 def fft2():
-    # perc es la variable que determina el porcentaje de coeficientes que se mantendrán
+    # decargar es la variable que determina si sólo regresar una imagen para descargar. Cuando no es recibida entrará
+    # a modo 'exposición'
+    descargar = request.form.get("descarga", False)
+    
 
+    # perc es la variable que determina el porcentaje de coeficientes que se mantendrán
     perc = request.form.get("number")
 
     # Si el usuario nos dio un porcentaje de coeficientes usaremos eso sino probaremos con 4 diferentes porcentaje
@@ -136,6 +142,8 @@ def fft2():
                 "bytes": f"{result_file_size:,}",
             }
         )
+        if descargar:
+            return send_file(compressed_file_name, mimetype=file.content_type)
 
     return render_template(
         "comparacion.html",
