@@ -2,17 +2,13 @@
 # Imports
 # ----------------------------------------------------------------------------#
 
-from unittest import result
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request
 
-# from flask.ext.sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
-from forms import *
 import os
 import numpy as np
 from matplotlib.image import imread
-import matplotlib.pyplot as plt
 from PIL import Image
 
 
@@ -27,27 +23,7 @@ static_directory = os.path.join(current_wd, "static")
 image_directory = os.path.join(static_directory, "images")
 uncompressed_directory = os.path.join(image_directory, "uncompressed")
 compressed_directory = os.path.join(image_directory, "compressed")
-# db = SQLAlchemy(app)
 
-# Automatically tear down SQLAlchemy.
-"""
-@app.teardown_request
-def shutdown_session(exception=None):
-    db_session.remove()
-"""
-
-# Login required decorator.
-"""
-def login_required(test):
-    @wraps(test)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return test(*args, **kwargs)
-        else:
-            flash('You need to login first.')
-            return redirect(url_for('login'))
-    return wrap
-"""
 # ----------------------------------------------------------------------------#
 # Controllers.
 # ----------------------------------------------------------------------------#
@@ -83,10 +59,10 @@ def fft2():
     # perc es la variable que determina el porcentaje de coeficientes que se mantendrán
 
     perc = request.form.get("number")
-    
+
     # Si el usuario nos dio un porcentaje de coeficientes usaremos eso sino probaremos con 4 diferentes porcentaje
     # 10% 5% 1% y 0.5%
-    porcentajes = [int(perc)/100] if perc else [0.1, 0.05, 0.01, 0.005]
+    porcentajes = [int(perc) / 100] if perc else [0.1, 0.05, 0.01, 0.005]
 
     # obtenemos el archivo a partir del formulario, viene etiquetado con ´the_file´ en compresion.html
     file = request.files["the_file"]
@@ -145,7 +121,9 @@ def fft2():
         img = img.convert("L")
 
         # Guardamos la imagen en el directorio de imagenes comprimidas
-        compressed_file_name = os.path.join(compressed_directory, f"{keep}_{file.filename}")
+        compressed_file_name = os.path.join(
+            compressed_directory, f"{keep}_{file.filename}"
+        )
         img.save(compressed_file_name)
 
         # Aquí calculamos el tamaño en Bytes de la imagen comprimida razones demostrativas
@@ -155,7 +133,7 @@ def fft2():
         comprimidas.append(
             {
                 "ruta": f"/static/images/compressed/{keep}_{file.filename}",
-                "bytes": f"{result_file_size:,}"
+                "bytes": f"{result_file_size:,}",
             }
         )
 
@@ -166,35 +144,6 @@ def fft2():
         original_file_size=f"{original_file_size:,}",
     )
 
-# @app.route('/login')
-# def login():
-#     form = LoginForm(request.form)
-#     return render_template('forms/login.html', form=form)
-
-
-# @app.route('/register')
-# def register():
-#     form = RegisterForm(request.form)
-#     return render_template('forms/register.html', form=form)
-
-
-# @app.route('/forgot')
-# def forgot():
-#     form = ForgotForm(request.form)
-#     return render_template('forms/forgot.html', form=form)
-
-# # Error handlers.
-
-
-# @app.errorhandler(500)
-# def internal_error(error):
-#     #db_session.rollback()
-#     return render_template('errors/500.html'), 500
-
-
-# @app.errorhandler(404)
-# def not_found_error(error):
-# return render_template('errors/404.html'), 404
 
 if not app.debug:
     file_handler = FileHandler("error.log")
@@ -213,10 +162,3 @@ if not app.debug:
 # Default port:
 if __name__ == "__main__":
     app.run()
-
-# Or specify port manually:
-"""
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
-"""
