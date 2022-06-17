@@ -58,9 +58,11 @@
             <h3>Imagen Original</h3>
             <h5>* Tamaño en bytes: {{original_file_size}}</h5>
             <img src="{{ file }}">
+            {% for file in compressed_files %}
             <h3>Imagen Comprimida</h3>
-            <h5>* Tamaño en bytes: {{result_file_size}}</h5>
-            <img src="{{ compressed_file }}">
+            <h5>* Tamaño en bytes: {{file["bytes"]}}</h5>
+            <img src="{{ file['ruta'] }}">
+            {% endfor %}
         </div>
       <!--/.row-->
     </div>

@@ -2,6 +2,7 @@
 # Imports
 # ----------------------------------------------------------------------------#
 
+from unittest import result
 from flask import Flask, render_template, request, send_file
 
 # from flask.ext.sqlalchemy import SQLAlchemy
@@ -80,7 +81,12 @@ def fft():
 @app.route("/fft2", methods=["POST"])
 def fft2():
     # perc es la variable que determina el porcentaje de coeficientes que se mantendrán
-    perc = 0.1
+
+    perc = request.form.get("number")
+    
+    # Si el usuario nos dio un porcentaje de coeficientes usaremos eso sino probaremos con 4 diferentes porcentaje
+    # 10% 5% 1% y 0.5%
+    porcentajes = [int(perc)/100] if perc else [0.1, 0.05, 0.01, 0.005]
 
     # obtenemos el archivo a partir del formulario, viene etiquetado con ´the_file´ en compresion.html
     file = request.files["the_file"]
@@ -90,6 +96,9 @@ def fft2():
 
     # guardamos nuestro archivo a dicha ruta
     file.save(file_name)
+
+    # Calculamos el tamaño en Bytes de la imagen original
+    original_file_size = os.stat(file_name).st_size  # número de Bytes
 
     # Utilizando la función imread volvemos a abrir nuestro archivo
     A = imread(file_name)
@@ -108,44 +117,53 @@ def fft2():
     # Ordenamos nuestro arreglo del más pequeño al más grande (ascendente)
     Btsort = np.sort(magnitudes)
 
-    # Calculamos el porcentaje de los valores que despreciaremos. Si sólo queremos el 10%, eliminaremos el 90%
-    # np.floor redondea al número más bajo, con el fin de tener un número entero.
-    cantidad_a_eliminar = int(np.floor((1 - perc) * len(Btsort)))
+    comprimidas = []
+    # Por cada porcentaje de coeficientes haremos las operaciones y guardaremos los resultados en 'comprimidas'
+    for keep in porcentajes:
+        # Calculamos el porcentaje de los valores que despreciaremos. Si sólo queremos el 10%, eliminaremos el 90%
+        # np.floor redondea al número más bajo, con el fin de tener un número entero.
+        cantidad_a_eliminar = int(np.floor((1 - keep) * len(Btsort)))
 
-    # El número anterior lo usaremos como índice y así obtener el coeficiente que representa el límite inferior de los coeficientes que mantendremos
-    limite = Btsort[cantidad_a_eliminar]
+        # El número anterior lo usaremos como índice y así obtener el coeficiente que representa el límite inferior de los coeficientes que mantendremos
+        limite = Btsort[cantidad_a_eliminar]
 
-    # A partir de este límite crearemos una máscara determinando aquellos coeficiente que no son despreciables.
-    # ind es una matriz del mismo tamaño que Bt (transformada de B)
-    # pero con valores booleanos (que pueden ser interpretados como respondiendo la pregunta '¿este coeficiente es suficientemente grande/relevante para mantener en la memoria?')
-    ind = np.abs(Bt) > limite
+        # A partir de este límite crearemos una máscara determinando aquellos coeficiente que no son despreciables.
+        # ind es una matriz del mismo tamaño que Bt (transformada de B)
+        # pero con valores booleanos (que pueden ser interpretados como respondiendo la pregunta '¿este coeficiente es suficientemente grande/relevante para mantener en la memoria?')
+        ind = np.abs(Bt) > limite
 
-    # Usaremos la mascara ind para eliminar aquellos valores muy pequeños para ser importantes. En este caso eliminar es volver cero.
-    # Esto se hace mediante el producto punto de matrices.
-    # Al final tenemos una matriz del mismo tamaño que Bt pero sólo con coeficientes grandes.
-    Atlow = Bt * ind
+        # Usaremos la mascara ind para eliminar aquellos valores muy pequeños para ser importantes. En este caso eliminar es volver cero.
+        # Esto se hace mediante el producto punto de matrices.
+        # Al final tenemos una matriz del mismo tamaño que Bt pero sólo con coeficientes grandes.
+        Atlow = Bt * ind
 
-    # Hacemos la transformada inversa para regresar el dominio original
-    Alow = np.fft.ifft2(Atlow).real
+        # Hacemos la transformada inversa para regresar el dominio original
+        Alow = np.fft.ifft2(Atlow).real
 
-    # Convertimos nuestra matriz de números a una imagen de escala de grises (porque ya no tenemos los tres canales RGB)
-    img = Image.fromarray(Alow)
-    img = img.convert("L")
+        # Convertimos nuestra matriz de números a una imagen de escala de grises (porque ya no tenemos los tres canales RGB)
+        img = Image.fromarray(Alow)
+        img = img.convert("L")
 
-    # Guardamos la imagen en el directorio de imagenes comprimidas
-    compressed_file_name = os.path.join(compressed_directory, file.filename)
-    img.save(compressed_file_name)
+        # Guardamos la imagen en el directorio de imagenes comprimidas
+        compressed_file_name = os.path.join(compressed_directory, f"{keep}_{file.filename}")
+        img.save(compressed_file_name)
 
-    # Aquí calculamos el tamaño en Bytes de ambos para razones demostrativas
-    original_file_size = os.stat(file_name).st_size  # en Bytes
-    result_file_size = os.stat(compressed_file_name).st_size  # en Bytes
+        # Aquí calculamos el tamaño en Bytes de la imagen comprimida razones demostrativas
+        result_file_size = os.stat(compressed_file_name).st_size  # en Bytes
+
+        # Guardamos la ruta de nuestra imagen comprimida junto con su tamaño en nuestra lista
+        comprimidas.append(
+            {
+                "ruta": f"/static/images/compressed/{keep}_{file.filename}",
+                "bytes": f"{result_file_size:,}"
+            }
+        )
 
     return render_template(
         "comparacion.html",
         file=f"/static/images/uncompressed/{file.filename}",
-        compressed_file=f"/static/images/compressed/{file.filename}",
+        compressed_files=comprimidas,
         original_file_size=f"{original_file_size:,}",
-        result_file_size=f"{result_file_size:,}",
     )
 
 # @app.route('/login')
